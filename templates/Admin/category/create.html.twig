@@ -3,5 +3,9 @@
 <main>
 <h1>Crée des bonbons</h1>
 <a href={{path('admin_category_index')}}> Acceuil</a>
+{{form_start(formulaire)}}
+{{form_rest(form_start)}}
+<input type="submit" value="Créer">
+{{form_end(formulaire)}}
 </main>
 {% endblock %}

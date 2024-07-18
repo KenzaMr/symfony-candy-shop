@@ -63,7 +63,7 @@ class ArticleController extends AbstractController
 
 
     #[Route('/delete/{id}', name: 'delete', requirements: ['id' => Requirement::DIGITS])]
-    public function delete($id, CandyRepository $repository, EntityManagerInterface $em,Candy $candy): Response
+    public function delete($id, CandyRepository $repository, EntityManagerInterface $em, Candy $candy): Response
     {
         // Supprimer l'enregistrement  de la base de donnée qui à l'id passé en parametre 
         // $candy = $repository->find($id);
@@ -73,4 +73,3 @@ class ArticleController extends AbstractController
         return $this->render('Admin/article/delete.html.twig');
     }
 }
-
