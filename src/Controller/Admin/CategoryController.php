@@ -36,6 +36,7 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $object->setCreateAt(new DateTimeImmutable());
+            $em->persist($object);
             $em->flush();
             return $this->redirectToRoute('admin_category_index');
         }
@@ -48,7 +49,9 @@ class CategoryController extends AbstractController
         // $em->persist($object);
         // $em->flush();
 
-        return $this->render('Admin/category/create.html.twig');
+        return $this->render('Admin/category/create.html.twig', [
+            'formulaire' => $form
+        ]);
     }
     #[Route('/update/{id}', 'update')]
     public function update(Category $category, Request $request, EntityManagerInterface $em): Response
