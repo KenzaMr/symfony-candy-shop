@@ -20,6 +20,7 @@ class CategoryController extends AbstractController
     public function __construct()
     {
     }
+
     #[Route('/', 'index')]
     public function index(CategoryRepository $repository): Response
     {
@@ -28,16 +29,20 @@ class CategoryController extends AbstractController
             'categories' => $categories
         ]);
     }
+
     #[Route('/create', 'create')]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
         $object = new Category;
         $form = $this->createForm(CategoryType::class, $object);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()){
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $object->setCreateAt(new DateTimeImmutable());
             $em->persist($object);
             $em->flush();
+
+            $this->addFlash('sucess','Une nouvelle catégorie à été créer');
             return $this->redirectToRoute('admin_category_index');
         }
 
@@ -53,14 +58,18 @@ class CategoryController extends AbstractController
             'formulaire' => $form
         ]);
     }
+
     #[Route('/update/{id}', 'update')]
     public function update(Category $category, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $category->setUpdateAt(new DateTimeImmutable());
             $em->flush();
+
+            $this->addFlash('sucess','La catégorie a été modifier');
             return $this->redirectToRoute('admin_category_index');
         }
         // $object = $repository->find($id);
@@ -71,11 +80,13 @@ class CategoryController extends AbstractController
             'formulaire' => $form
         ]);
     }
+
     #[Route('/delete/{id}', 'delete')]
     public function delete($id, EntityManagerInterface $em, Category $category): Response
     {
         $em->remove($category);
         $em->flush();
+
         return $this->redirectToRoute('admin_category_index');
     }
 }

@@ -7,9 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Requirement\Requirement;
 use App\Entity\Candy;
+use App\Form\CandyType;
 use App\Repository\CandyRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[Route('/admin/article', 'admin_article_')]
 class ArticleController extends AbstractController
@@ -19,22 +22,39 @@ class ArticleController extends AbstractController
     {
         return $this->render('Admin/article/index.html.twig');
     }
+
     #[Route('/create', 'create')]
-    public function create(EntityManagerInterface $em): Response
+    public function create(EntityManagerInterface $em, Request $request): Response
     {
         $object = new Candy;
-        $object->setName('chamalow')
-            ->setDescription('bonbon mou')
-            ->setCreateAt(new DateTimeImmutable())
-            ->setSlug('chamalow');
+        // $object->setName('chamalow')
+        //     ->setDescription('bonbon mou')
+        //     ->setCreateAt(new DateTimeImmutable())
+        //     ->setSlug('chamalow');
+        $form = $this->createForm(CandyType::class, $object);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $object->setCreateAt(new DateTimeImmutable());
 
-        $em->persist($object);
-        $em->flush();
-        return $this->render('Admin/article/create.html.twig');
+            $slugger=new AsciiSlugger();
+            $slug = $slugger->slug($object->getName());
+            $object->setSlug(strtolower($slug));
+
+            $em->persist($object);
+            $em->flush();
+
+            $this->addFlash('success','Ton bonbon a été créer');
+            return $this->redirectToRoute('admin_article_index');
+        }
+
+        return $this->render('Admin/article/create.html.twig', [
+            'formulaire_candy' => $form
+        ]);
     }
+
     #[Route('/update/{id}', name: 'update', requirements: ['id' => Requirement::DIGITS])]
-    public function update($id, CandyRepository $repository, EntityManagerInterface $em): Response
+    public function update($id,Candy $candy, EntityManagerInterface $em,Request $request): Response
     {
         // Find() permet de récupérer un enregistrement de la base de donnée grâce à son id
         // $candy= $repository->find(1);
@@ -52,13 +72,20 @@ class ArticleController extends AbstractController
         // ]);
 
         // Récupérer l'objet qui contient ce qui est tapé dans l'url et ensuite comment mettre à jour la base de donnée
-        $candy = $repository->find($id);
-        $candy->setName('Tagada');
+        // $candy = $repository->find($id);
+        // $candy->setName('Tagada');
+        $form=$this->createForm(CandyType::class,$candy);
+        $form->handleRequest($request);
 
+        if($form->isSubmitted() && $form->isValid()){
+
+        }
         $em->flush();
-        dd($candy);
+        // dd($candy);
 
-        return $this->render('Admin/article/update.html.twig');
+        return $this->render('Admin/article/update.html.twig',[
+            ''
+        ]);
     }
 
 

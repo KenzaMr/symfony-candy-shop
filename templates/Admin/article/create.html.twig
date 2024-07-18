@@ -1,7 +1,11 @@
 {% extends "base.html.twig" %}
 {% block body %}
 	<main>
-		<h1>Essaie de la page
+		<h1>Créer ton bonbon
 		</h1>
+		{{form_start(formulaire_candy)}}
+		{{form_rest(formulaire_candy)}}
+		<input type="submit" value='Créer'>
+		{{form_end(formulaire_candy)}}
 	</main>
 {% endblock %}
