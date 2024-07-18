@@ -3,5 +3,12 @@
 <main>
 <h1>Catégorie des bonbons</h1>
 <a href={{path('admin_category_index')}}> Acceuil</a>
+<table>
+{% for categorie in categories %}
+    <tr>
+    <td>{{categorie.name}}</td>
+    <td>{{categorie.description}}</td></tr>
+{% endfor %}
+</table>
 </main>
 {% endblock %}

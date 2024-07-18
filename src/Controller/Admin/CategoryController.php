@@ -15,10 +15,17 @@ use App\Repository\CategoryRepository;
 #[Route('/admin/category', 'admin_category_')]
 class CategoryController extends AbstractController
 {
-    #[Route('/', 'index')]
-    public function index(): Response
+    public function __construct()
     {
-        return $this->render('Admin/category/index.html.twig');
+        
+    }
+    #[Route('/', 'index')]
+    public function index(CategoryRepository $repository): Response
+    {
+        $categories=$repository->findAll();
+        return $this->render('Admin/category/index.html.twig',[
+            'categories'=>$categories
+        ]);
     }
     #[Route('/create', 'create')]
     public function create(EntityManagerInterface $em): Response
@@ -44,10 +51,10 @@ class CategoryController extends AbstractController
         return $this->render('Admin/category/update.html.twig');
     }
     #[Route('/delete/{id}', 'delete')]
-    public function delete($id,EntityManagerInterface $em,CategoryRepository $repository, Candy $candy): Response
+    public function delete($id,EntityManagerInterface $em, Category $category): Response
     {
-        $em->remove($candy);
+        $em->remove($category);
         $em->flush();
-        return $this->render('Admin/category/delete.html.twig');
+        return $this->redirectToRoute('admin_category_index');
     }
 }
