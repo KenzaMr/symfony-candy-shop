@@ -18,9 +18,12 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 class ArticleController extends AbstractController
 {
     #[Route('/', 'index')]
-    public function index(): Response
+    public function index(CandyRepository $repository): Response
     {
-        return $this->render('Admin/article/index.html.twig');
+        $candy = $repository->findAll();
+        return $this->render('Admin/article/index.html.twig', [
+            "bonbons" => $candy
+        ]);
     }
 
     #[Route('/create', 'create')]
@@ -37,14 +40,14 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $object->setCreateAt(new DateTimeImmutable());
 
-            $slugger=new AsciiSlugger();
+            $slugger = new AsciiSlugger();
             $slug = $slugger->slug($object->getName());
             $object->setSlug(strtolower($slug));
 
             $em->persist($object);
             $em->flush();
 
-            $this->addFlash('success','Ton bonbon a été créer');
+            $this->addFlash('success', 'Ton bonbon a été créer');
             return $this->redirectToRoute('admin_article_index');
         }
 
@@ -54,7 +57,7 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', requirements: ['id' => Requirement::DIGITS])]
-    public function update($id,Candy $candy, EntityManagerInterface $em,Request $request): Response
+    public function update($id, Candy $candy, EntityManagerInterface $em, Request $request): Response
     {
         // Find() permet de récupérer un enregistrement de la base de donnée grâce à son id
         // $candy= $repository->find(1);
@@ -74,17 +77,19 @@ class ArticleController extends AbstractController
         // Récupérer l'objet qui contient ce qui est tapé dans l'url et ensuite comment mettre à jour la base de donnée
         // $candy = $repository->find($id);
         // $candy->setName('Tagada');
-        $form=$this->createForm(CandyType::class,$candy);
+        $form = $this->createForm(CandyType::class, $candy);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
 
+            $this->addFlash('sucess', 'La catégorie a été modifier');
+            return $this->redirectToRoute('admin_article_index');
         }
-        $em->flush();
         // dd($candy);
 
-        return $this->render('Admin/article/update.html.twig',[
-            ''
+        return $this->render('Admin/article/update.html.twig', [
+            'formulaire_candy' => $form
         ]);
     }
 

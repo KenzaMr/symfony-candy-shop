@@ -2,8 +2,9 @@
 {% block body %}
 	<main>
 		<h1>Mis à jour</h1>
-		{{form_start()}}
-		{{form_rest()}}
-		{{form_end()}}
+		{{form_start(formulaire_candy)}}
+		{{form_rest(formulaire_candy)}}
+		<input type="submit" value="mettre à jour">
+		{{form_end(formulaire_candy)}}
 	</main>
 {% endblock %}
