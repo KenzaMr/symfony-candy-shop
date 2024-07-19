@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\CandyRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Webmozart\Assert\Assert as AssertAssert;
 
 #[ORM\Entity(repositoryClass: CandyRepository::class)]
 class Candy
@@ -14,9 +16,21 @@ class Candy
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Sequentially([
+        new Assert\NotBlank(message:"Le champ {{ label }} est plus que necessaire"),
+        new Assert\Length(min:1,max:30,minMessage:'La taille minimum pour le champ est de {{ limit }}',maxMessage:'La taille maximum pour le champ est de {{ limit }}'),
+        new Assert\Type('string')
+    ])]
+    // #[Assert\NotBlank(message:"Le champ {{ label }} est necessaire")]
+    // #[Assert\Length(
+    //     max:30,
+    //     minMessage:'La taille minimum pour le champ est de {{ limit }}',
+    //     maxMessage:'La taille maximum pour le champ est de {{ limit }}'
+    // )]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message:"Le champ {{ label }} est necessaire")]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
