@@ -16,13 +16,15 @@ class ContactDTO
     private ?string $message = null;
 
 
+    private ?string $service = null;
+
 
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): static
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -34,7 +36,7 @@ class ContactDTO
         return $this->message;
     }
 
-    public function setMessage(?string $message): static
+    public function setMessage(?string $message): self
     {
         $this->message = $message;
 
@@ -47,10 +49,20 @@ class ContactDTO
         return $this->mail;
     }
 
-    public function setMail(string $mail): static
+    public function setMail(string $mail): self
     {
         $this->mail = $mail;
 
+        return $this;
+    }
+
+    public function getService(): string
+    {
+        return $this->service;
+    }
+    public function setService(string $service): self
+    {
+        $this->service = $service;
         return $this;
     }
 }

@@ -1,9 +1,11 @@
 {% extends "base.html.twig" %}
 {% block body %}
-<main>
-{{form_start()}}
+	<main>
+    <h1>Contact</h1>
+		{{form_start(formulaire_contact)}}
+		{{form_rest(formulaire_contact)}}
+        <input type="submit" name="Envoie" >
+		{{form_end(formulaire_contact)}}
 
-{{form_end()}}
-
-</main>
+	</main>
 {% endblock %}

@@ -25,7 +25,7 @@ class CategoryController extends AbstractController
     public function index(CategoryRepository $repository): Response
     {
         $categories = $repository->findAll();
-        return $this->render('Admin/category/index.html.twig', [
+        return $this->render('admin/category/index.html.twig', [
             'categories' => $categories
         ]);
     }
@@ -54,7 +54,7 @@ class CategoryController extends AbstractController
         // $em->persist($object);
         // $em->flush();
 
-        return $this->render('Admin/category/create.html.twig', [
+        return $this->render('admin/category/create.html.twig', [
             'formulaire' => $form
         ]);
     }
@@ -76,7 +76,7 @@ class CategoryController extends AbstractController
         // $object->setName('Guimauve');
 
         // $em->flush();
-        return $this->render('Admin/category/update.html.twig', [
+        return $this->render('admin/category/update.html.twig', [
             'formulaire' => $form
         ]);
     }

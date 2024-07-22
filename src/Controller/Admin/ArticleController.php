@@ -21,7 +21,7 @@ class ArticleController extends AbstractController
     public function index(CandyRepository $repository): Response
     {
         $candy = $repository->findAll();
-        return $this->render('Admin/article/index.html.twig', [
+        return $this->render('admin/article/index.html.twig', [
             "bonbons" => $candy
         ]);
     }
@@ -51,7 +51,7 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('admin_article_index');
         }
 
-        return $this->render('Admin/article/create.html.twig', [
+        return $this->render('admin/article/create.html.twig', [
             'formulaire_candy' => $form
         ]);
     }
@@ -88,7 +88,7 @@ class ArticleController extends AbstractController
         }
         // dd($candy);
 
-        return $this->render('Admin/article/update.html.twig', [
+        return $this->render('admin/article/update.html.twig', [
             'formulaire_candy' => $form
         ]);
     }
@@ -102,6 +102,6 @@ class ArticleController extends AbstractController
         $em->remove($candy);
         $em->flush();
 
-        return $this->render('Admin/article/delete.html.twig');
+        return $this->render('admin/article/delete.html.twig');
     }
 }

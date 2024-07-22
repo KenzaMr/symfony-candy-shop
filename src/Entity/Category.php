@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,6 +26,18 @@ class Category
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updateAt = null;
+
+    #[ORM\PrePersist]
+    public function setCreateAtValue()
+    {
+        $this->createAt= new DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdateAtCreateAt()
+    {
+        $this->updateAt= new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
